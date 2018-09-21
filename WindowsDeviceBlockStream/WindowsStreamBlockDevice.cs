@@ -1,19 +1,26 @@
 ﻿using System.IO;
+using DiscUtils;
 using SimpleFileSystem;
 
 namespace WindowsDeviceBlockStream
 {
     public class WindowsStreamBlockDevice : IBlockDevice
     {
-        public WindowsStreamBlockDevice(Stream stream)
+        public WindowsStreamBlockDevice(string path)
         {
-            Stream = stream;
+            long diskSize = 30 * 1024 * 1024; //30MB
+            _disk = VirtualDisk.OpenDisk(path, FileAccess.ReadWrite);
+
+            Stream = _disk.Content;
         }
 
         private Stream Stream { get; set; }
+        private VirtualDisk _disk { get; set; }
+        private long sectorSize = 0;
+        private long blocks = 0;
 
-        public long BlockSize => 512;
-        public long TotalBlocks => 65536;
+        public long BlockSize => _disk.BlockSize;
+        public long TotalBlocks => _disk.Capacity / _disk.BlockSize;
 
         public byte[] ReadBlock(long offset)
         {

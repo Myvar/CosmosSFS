@@ -48,7 +48,7 @@ namespace WindowsDeviceBlockStream
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     Fs = new SimpleFS(new WindowsStreamBlockDevice(
-                        File.Open(ofd.FileName, FileMode.Open)));
+                       ofd.FileName));
                     Fs.Load();
                     LoadDir();
                 }
@@ -57,12 +57,12 @@ namespace WindowsDeviceBlockStream
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var sfd = new SaveFileDialog())
+            using (var ofd = new OpenFileDialog())
             {
-                if (sfd.ShowDialog() == DialogResult.OK)
+                if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     Fs = new SimpleFS(new WindowsStreamBlockDevice(
-                        File.Open(sfd.FileName, FileMode.OpenOrCreate)));
+                        ofd.FileName));
                     Fs.Format();
                     LoadDir();
                 }
