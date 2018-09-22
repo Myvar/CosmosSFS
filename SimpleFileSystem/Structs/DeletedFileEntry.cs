@@ -7,7 +7,7 @@ namespace SimpleFileSystem.Structs
     public class DeletedFileEntry : Structure
     {
         public override byte EntryType => 0x1A;
-        public DateTime TimeStamp { get; set; }
+        public long TimeStamp { get; set; }
         public long StartingBlock { get; set; }
         public long EndingBlock { get; set; }
         public long Length { get; set; }
@@ -15,7 +15,7 @@ namespace SimpleFileSystem.Structs
         public override void Write(BlockBuffer bb)
         {
             bb.WriteByte(EntryType);
-            bb.WriteLong(TimeStamp.ToFileTime());
+            bb.WriteLong(TimeStamp);
             bb.WriteLong(StartingBlock);
             bb.WriteLong(EndingBlock);
             bb.WriteLong(Length);
@@ -40,7 +40,7 @@ namespace SimpleFileSystem.Structs
         {
             bb.ReadByte();
           
-            TimeStamp = DateTime.FromFileTime(bb.ReadLong());
+            TimeStamp = bb.ReadLong();
             StartingBlock = bb.ReadLong();
             EndingBlock = bb.ReadLong();
             Length = bb.ReadLong();

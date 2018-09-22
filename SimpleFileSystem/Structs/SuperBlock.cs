@@ -6,7 +6,7 @@ namespace SimpleFileSystem.Structs
 {
     public class SuperBlock : Structure
     {
-        public DateTime TimeStamp { get; set; }
+        public long TimeStamp { get; set; }
         public long DataSizeInBlocks { get; set; }
         public long SizeOfIndexInBytes { get; set; }
         public byte VersionNumber { get; set; } = 0x10;
@@ -20,7 +20,7 @@ namespace SimpleFileSystem.Structs
         public override void Write(BlockBuffer bb)
         {
             bb.Offset = 0x0194;
-            bb.WriteLong(TimeStamp.ToFileTime());
+            bb.WriteLong(TimeStamp);
             bb.WriteLong(DataSizeInBlocks);
             bb.WriteLong(SizeOfIndexInBytes);
             bb.WriteByte((byte) 'S');
@@ -36,7 +36,7 @@ namespace SimpleFileSystem.Structs
         public override void Read(BlockBuffer bb)
         {
             bb.Offset = 0x0194;
-            TimeStamp = DateTime.FromFileTime(bb.ReadLong());
+            TimeStamp = bb.ReadLong();
             DataSizeInBlocks = bb.ReadLong();
             SizeOfIndexInBytes = bb.ReadLong();
             bb.Offset = 0x01AF;

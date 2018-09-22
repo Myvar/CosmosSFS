@@ -7,7 +7,7 @@ namespace SimpleFileSystem.Structs
     public class FileEntry : Structure
     {
         public override byte EntryType => 0x12;
-        public DateTime TimeStamp { get; set; }
+        public long TimeStamp { get; set; }
         public long StartingBlock { get; set; }
         public long EndingBlock { get; set; }
         public long Length { get; set; }
@@ -16,7 +16,7 @@ namespace SimpleFileSystem.Structs
         {
             bb.WriteByte(EntryType);
            
-            bb.WriteLong(TimeStamp.ToFileTime());
+            bb.WriteLong(TimeStamp);
             bb.WriteLong(StartingBlock);
             bb.WriteLong(EndingBlock);
             bb.WriteLong(Length);
@@ -39,7 +39,7 @@ namespace SimpleFileSystem.Structs
         {
             bb.ReadByte();
            
-            TimeStamp = DateTime.FromFileTime(bb.ReadLong());
+            TimeStamp = bb.ReadLong();
             StartingBlock = bb.ReadLong();
             EndingBlock = bb.ReadLong();
             Length = bb.ReadLong();

@@ -37,7 +37,7 @@ namespace SimpleFileSystem
                 SizeOfIndexInBytes = 0,
                 Checksum = 0,
                 DataSizeInBlocks = 0,
-                TimeStamp = DateTime.Now
+                TimeStamp = 0
             };
 
             SuperBlock.SizeOfIndexInBytes = 64 * 2;
@@ -46,7 +46,7 @@ namespace SimpleFileSystem
 
             var volumeIdentifier = new VolumeIdentifier
             {
-                TimeStamp = DateTime.Now,
+                TimeStamp = 0,
                 VolumeName = "SFS Volume"
             };
 
@@ -94,7 +94,7 @@ namespace SimpleFileSystem
             //add it
             IndexAria.Insert(IndexAria.Count - 1, new DirectoryEntry
             {
-                TimeStamp = DateTime.Now,
+                TimeStamp = 0,
                 Name = name
             });
 
@@ -184,25 +184,37 @@ namespace SimpleFileSystem
         {
             if (filePath.Length > 16320) return false;
 
+            FileEntry fileEntry = null;
+
             //file names must be guid
             foreach (var entry in IndexAria)
-                if (entry is FileEntry fe)
-                    if (fe.Name == filePath)
-                        return false;
-
-            var fileEntry = new FileEntry
             {
-                StartingBlock = SuperBlock.DataSizeInBlocks + SuperBlock.TotalReservedBlocks,
-                EndingBlock = +SuperBlock.TotalReservedBlocks + (data.Length / BlockDevice.TotalBlocks + 1),
-                Length = data.Length,
-                Name = filePath,
-                TimeStamp = DateTime.Now
-            };
+                if (entry is FileEntry fe)
+                {
+                    if (fe.Name == filePath)
+                    {
+                        fileEntry = fe;
+                        break;
+                    }
+                }
+            }
 
-            SuperBlock.DataSizeInBlocks += fileEntry.EndingBlock - fileEntry.StartingBlock;
+            if (fileEntry == null)
+            {
+                fileEntry = new FileEntry
+                {
+                    StartingBlock = SuperBlock.DataSizeInBlocks + SuperBlock.TotalReservedBlocks,
+                    EndingBlock = SuperBlock.TotalReservedBlocks + (data.Length / BlockDevice.TotalBlocks + 1),
+                    Length = data.Length,
+                    Name = filePath,
+                    TimeStamp = 0
+                };
 
-            //add it
-            IndexAria.Insert(IndexAria.Count - 1, fileEntry);
+                SuperBlock.DataSizeInBlocks += fileEntry.EndingBlock - fileEntry.StartingBlock;
+
+                //add it
+                IndexAria.Insert(IndexAria.Count - 1, fileEntry);
+            }
 
             //write data
             BlockBuffer.Offset = fileEntry.StartingBlock * BlockDevice.BlockSize;
@@ -230,9 +242,12 @@ namespace SimpleFileSystem
             foreach (var entry in IndexAria)
                 if (entry is FileEntry fe)
                     if (fe.Name == filePath)
+                    {
                         IndexAria.Remove(fe);
-            Save();
-            return true;
+                        Save();
+                        return true;
+                    }
+
             return false;
         }
 

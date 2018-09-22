@@ -35,9 +35,9 @@ namespace WindowsDeviceBlockStream
                 listBox1.Items.Add(directory);
             }
 
-            foreach (var directory in Fs?.GetAllFiles())
+            foreach (var fl in Fs?.GetAllFiles())
             {
-                listBox1.Items.Add(directory);
+                listBox1.Items.Add(fl + " " + Fs.ReadAllText(fl));
             }
         }
 
@@ -61,8 +61,7 @@ namespace WindowsDeviceBlockStream
             {
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    Fs = new SimpleFS(new WindowsStreamBlockDevice(
-                        ofd.FileName));
+                    Fs = new SimpleFS(new WindowsStreamBlockDevice(ofd.FileName));
                     Fs.Format();
                     LoadDir();
                 }
@@ -103,8 +102,12 @@ namespace WindowsDeviceBlockStream
 
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Fs?.WriteAllText("test.txt", "Hello World!");
-            Fs.WriteAllBytes("test.jpg", File.ReadAllBytes("test.jpg"));
+           // Fs?.DeleteFile("test.txt");
+           // Fs?.DeleteFile("test.jpg");
+
+            Fs?.WriteAllText("bob.txt", "xD");
+            Fs?.WriteAllText("lol.txt", "LOL");
+            //Fs?.WriteAllBytes("test.jpg", File.ReadAllBytes("test.jpg"));
 
             LoadDir();
         }

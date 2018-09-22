@@ -8,12 +8,12 @@ namespace SimpleFileSystem.Structs
     {
         public override byte EntryType => 0x11;
         
-        public DateTime TimeStamp { get; set; }
+        public long TimeStamp { get; set; }
 
         public override void Write(BlockBuffer bb)
         {
             bb.WriteByte(EntryType);
-            bb.WriteLong(TimeStamp.ToFileTime());
+            bb.WriteLong(TimeStamp);
 
             const int rem = 46;
             if (Name.Length > rem)
@@ -33,7 +33,7 @@ namespace SimpleFileSystem.Structs
         {
             bb.ReadByte();
           
-            TimeStamp = DateTime.FromFileTime(bb.ReadLong());
+            TimeStamp = bb.ReadLong();
             Continuations = bb.ReadByte();
             Name = bb.ReadString();
         }
