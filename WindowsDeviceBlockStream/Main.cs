@@ -72,15 +72,15 @@ namespace WindowsDeviceBlockStream
         private void newToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             Fs?.CreateDirectory("test");
-
-            Fs?.CreateDirectory(
-                "veryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryvery" +
-                "veryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryvery" +
-                "veryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryvery" +
-                "veryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryvery" +
-                "longName/lol/gg");
-            Fs?.CreateDirectory("test/bob");
-            Fs?.CreateDirectory("test/lol/gg");
+//
+//            Fs?.CreateDirectory(
+//                "veryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryvery" +
+//                "veryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryvery" +
+//                "veryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryvery" +
+//                "veryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryvery" +
+//                "longName/lol/gg");
+//            Fs?.CreateDirectory("test/bob");
+//            Fs?.CreateDirectory("test/lol/gg");
             LoadDir();
         }
 
@@ -105,17 +105,18 @@ namespace WindowsDeviceBlockStream
         {
             // Fs?.DeleteFile("test.txt");
             // Fs?.DeleteFile("test.jpg");
-            var sw = new Stopwatch();
-           
-            var buf = File.ReadAllBytes("test.jpg");
-            sw.Start();
-            Fs?.WriteAllBytes("test.jpg", buf);
-            sw.Stop();
-            Console.WriteLine("Milliseconds: " + sw.Elapsed.Milliseconds + " |  bytes: " + buf.Length);
-
-
-            Fs?.WriteAllText("bob.txt", "xD");
-            Fs?.WriteAllText("lol.txt", "LOL");
+//            var sw = new Stopwatch();
+//           
+//            var buf = File.ReadAllBytes("test.jpg");
+//            sw.Start();
+//            Fs?.WriteAllBytes("test.jpg", buf);
+//            sw.Stop();
+//            Console.WriteLine("Milliseconds: " + sw.Elapsed.Milliseconds + " |  bytes: " + buf.Length);
+//
+//
+//            Fs?.WriteAllText("bob.txt", "xD");
+//            Fs?.WriteAllText("lol.txt", "LOL");
+            Fs?.WriteAllText("x.txt", "content of X");
             //Fs?.WriteAllBytes("test.jpg", File.ReadAllBytes("test.jpg"));
 
             LoadDir();

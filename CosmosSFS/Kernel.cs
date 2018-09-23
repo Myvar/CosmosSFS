@@ -26,13 +26,16 @@ namespace CosmosSFS
             fs.Load();
             Console.WriteLine("Loaded FS");
 
-            Console.WriteLine("bob.txt");
-            Console.WriteLine(fs.ReadAllText("bob.txt"));
-            Console.WriteLine("--------------------------------");
+//            Console.WriteLine("bob.txt");
+//            Console.WriteLine(fs.ReadAllText("bob.txt"));
+//            Console.WriteLine("--------------------------------");
+//
+//            Console.WriteLine("lol.txt");
+//            Console.WriteLine(fs.ReadAllText("lol.txt"));
+//            Console.WriteLine("--------------------------------");
 
-            Console.WriteLine("lol.txt");
-            Console.WriteLine(fs.ReadAllText("lol.txt"));
-            Console.WriteLine("--------------------------------");
+            //fs.CreateDirectory("dir");
+            fs.DeleteDirectory("dir");
 
             Console.WriteLine("Done");
         }

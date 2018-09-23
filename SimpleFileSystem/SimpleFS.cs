@@ -87,17 +87,22 @@ namespace SimpleFileSystem
 
             //dir names must be guid
             foreach (var entry in IndexAria)
+            {
                 if (entry is DirectoryEntry de)
+                {
                     if (de.Name == name)
+                    {
                         return false;
-
+                    }
+                }
+            }
+            
             //add it
             IndexAria.Insert(IndexAria.Count - 1, new DirectoryEntry
             {
                 TimeStamp = 0,
                 Name = name
             });
-
             Save();
 
             return true;
@@ -107,13 +112,17 @@ namespace SimpleFileSystem
         {
             //dir names must be guid
             foreach (var entry in IndexAria)
+            {
                 if (entry is DirectoryEntry de)
+                {
                     if (de.Name == name)
                     {
                         IndexAria.Remove(de);
                         Save();
                         return true;
                     }
+                }
+            }
 
 
             return false;
