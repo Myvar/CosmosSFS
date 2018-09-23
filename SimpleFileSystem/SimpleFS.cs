@@ -159,15 +159,22 @@ namespace SimpleFileSystem
             FileEntry file = null;
 
             foreach (var entry in IndexAria)
+            {
                 if (entry is FileEntry fe)
+                {
                     if (fe.Name == filePath)
+                    {
                         file = fe;
+                    }
+                }
+            }
 
             if (file == null) return null;
 
             var buf = new List<byte>();
 
             BlockBuffer.Offset = file.StartingBlock * BlockDevice.BlockSize;
+
 
             for (int i = 0; i < file.Length; i++)
             {
@@ -204,7 +211,8 @@ namespace SimpleFileSystem
                 fileEntry = new FileEntry
                 {
                     StartingBlock = SuperBlock.DataSizeInBlocks + SuperBlock.TotalReservedBlocks,
-                    EndingBlock = SuperBlock.TotalReservedBlocks + (data.Length / BlockDevice.TotalBlocks + 1),
+                    EndingBlock = (SuperBlock.DataSizeInBlocks + SuperBlock.TotalReservedBlocks) +
+                                  (data.Length / BlockDevice.BlockSize) + 1,
                     Length = data.Length,
                     Name = filePath,
                     TimeStamp = 0
@@ -217,12 +225,21 @@ namespace SimpleFileSystem
             }
 
             //write data
-            BlockBuffer.Offset = fileEntry.StartingBlock * BlockDevice.BlockSize;
+            var bl = fileEntry.EndingBlock - fileEntry.StartingBlock;
 
-            foreach (var b in data)
+            var buf = new byte[BlockDevice.BlockSize];
+
+            long c = 0;
+            for (int i = 0; i < bl - 1; i++)
             {
-                BlockBuffer.WriteByte(b);
+                Array.Copy(data, i * BlockDevice.BlockSize, buf, 0, BlockDevice.BlockSize);
+                c += BlockDevice.BlockSize;
+                BlockDevice.WriteBlock(fileEntry.StartingBlock + i, buf);
             }
+
+
+            Array.Copy(data, c, buf, 0, data.Length - c);
+            BlockDevice.WriteBlock(fileEntry.StartingBlock + (bl - 1), buf);
 
             Save();
             return true;

@@ -17,13 +17,14 @@ namespace CosmosSFS
             var p = new Partition(blockDevice, 0, blockDevice.BlockCount);
             var fs = new SimpleFS(new CosmosBlockDevice(p));
 
+//            fs.Format();
+//            Console.WriteLine("Loaded FS");
+//
+//            fs.WriteAllText("bob.txt", "A");
+//            fs.WriteAllText("lol.txt", "B");
+
             fs.Load();
-
             Console.WriteLine("Loaded FS");
-
-            //fs.WriteAllText("bob.txt", "A");
-            //fs.WriteAllText("lol.txt", "B");
-
 
             Console.WriteLine("bob.txt");
             Console.WriteLine(fs.ReadAllText("bob.txt"));

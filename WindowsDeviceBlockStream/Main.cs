@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -48,7 +49,7 @@ namespace WindowsDeviceBlockStream
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     Fs = new SimpleFS(new WindowsStreamBlockDevice(
-                       ofd.FileName));
+                        ofd.FileName));
                     Fs.Load();
                     LoadDir();
                 }
@@ -102,8 +103,16 @@ namespace WindowsDeviceBlockStream
 
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           // Fs?.DeleteFile("test.txt");
-           // Fs?.DeleteFile("test.jpg");
+            // Fs?.DeleteFile("test.txt");
+            // Fs?.DeleteFile("test.jpg");
+            var sw = new Stopwatch();
+           
+            var buf = File.ReadAllBytes("test.jpg");
+            sw.Start();
+            Fs?.WriteAllBytes("test.jpg", buf);
+            sw.Stop();
+            Console.WriteLine("Milliseconds: " + sw.Elapsed.Milliseconds + " |  bytes: " + buf.Length);
+
 
             Fs?.WriteAllText("bob.txt", "xD");
             Fs?.WriteAllText("lol.txt", "LOL");
@@ -124,12 +133,22 @@ namespace WindowsDeviceBlockStream
         private void readTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Console.WriteLine("test.txt:");
-            Console.WriteLine(Fs.ReadAllText("test.txt"));
-
+            var sw = new Stopwatch();
+            sw.Start();
+            var buf = File.ReadAllBytes("test.jpg");
+            sw.Stop();
+            Console.WriteLine("Milliseconds: " + sw.Elapsed.Milliseconds + " |  bytes: " + buf.Length);
+            //Console.WriteLine(Fs.ReadAllText("test.txt"));
             Console.WriteLine("test.jpg:");
             Console.WriteLine($"Before Hash: {CalculateMD5(File.ReadAllBytes("test.jpg"))}");
             Console.WriteLine($"After Hash: {CalculateMD5(Fs?.ReadAllBytes("test.jpg"))}");
             File.WriteAllBytes("test1.jpg", Fs?.ReadAllBytes("test.jpg"));
+
+
+        }
+
+        private void dDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
         }
     }
 }

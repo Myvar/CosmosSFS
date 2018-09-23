@@ -12,15 +12,16 @@ namespace WindowsDeviceBlockStream
             _disk = VirtualDisk.OpenDisk(path, FileAccess.ReadWrite);
 
             Stream = _disk.Content;
+            Stream.Position = 0;
         }
 
-        private Stream Stream { get; set; }
-        private VirtualDisk _disk { get; set; }
+        public Stream Stream { get; set; }
+        public VirtualDisk _disk { get; set; }
         private long sectorSize = 0;
         private long blocks = 0;
 
-        public long BlockSize => _disk.BlockSize;
-        public long TotalBlocks => _disk.Capacity / _disk.BlockSize;
+        public long BlockSize => _disk.BlockSize ;
+        public long TotalBlocks => (_disk.Capacity / _disk.BlockSize);
 
         public byte[] ReadBlock(long offset)
         {
